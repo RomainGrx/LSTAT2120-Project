@@ -22,6 +22,8 @@ colnames(data)[15] <- "number_of_cylinders"
 data <- droplevels(data)
 #data <- sample(data)
 
+names(data)[names(data)=="ï..symboling"] <- "symboling"
+
 #DIvision train an test set
 set.seed((2))
 sample <- sample.int(n=nrow(data),size=floor(.25*nrow(data)),replace=F)
@@ -41,15 +43,15 @@ pie(as.vector(make),labels=paste(names(make),"(",pourcentage_make,"%)",sep=""),r
 colors=c("#CC0000","#FF0000") #hexadecimal color code
 fuel_type <- table(data$fuel_type)
 pourcentage_fuel_type <- round(as.vector(fuel_type)/sum(as.vector(fuel_type))*100,1)
-pie(as.vector(fuel_type),labels=paste(names(fuel_type),"(",pourcentage_fuel_type,"%)",sep=""),radius=0.6,col = brewer.pal(n=2,name="RdYlBu"),cex=0.45)
+pie(as.vector(fuel_type),labels=paste(names(fuel_type),"(",pourcentage_fuel_type,"%)",sep=""),radius=0.6,col = brewer.pal(n=3,name="RdYlBu"),cex=0.45)
 
 aspiration <- table(data$aspiration)
 pourcentage_aspiration <- round(as.vector(aspiration)/sum(as.vector(aspiration))*100,1)
-pie(as.vector(aspiration),labels=paste(names(aspiration),"(",pourcentage_aspiration,"%)",sep=""),radius=0.6,col=brewer.pal(n=2,name="RdYlBu"),cex=0.45)
+pie(as.vector(aspiration),labels=paste(names(aspiration),"(",pourcentage_aspiration,"%)",sep=""),radius=0.6,col=brewer.pal(n=3,name="RdYlBu"),cex=0.45)
 
 number_of_doors <- table(data$number_of_doors)
 pourcentage_number_of_doors <- round(as.vector(number_of_doors)/sum(as.vector(number_of_doors))*100,1)
-pie(as.vector(number_of_doors),labels=paste(names(number_of_doors),"(",pourcentage_number_of_doors,"%)",sep=""),radius=0.6,col = brewer.pal(n=2,name="RdYlBu"),cex=0.45)
+pie(as.vector(number_of_doors),labels=paste(names(number_of_doors),"(",pourcentage_number_of_doors,"%)",sep=""),radius=0.6,col = brewer.pal(n=3,name="RdYlBu"),cex=0.45)
 
 body_style <- table(data$body_style)
 pourcentage_body_style <- round(as.vector(body_style)/sum(as.vector(body_style))*100,1)
@@ -76,7 +78,7 @@ dev.off()
 #Quantitative variables
 library(ggplot2)
 library(e1071)
-names_c <- c("ï..symboling","normalized_losses","wheel_base","length","width","height","curb_weight","engine_size","bore","stroke","compression_ratio","horsepower","peak_rpm","city_mpg","highway_mpg")
+names_c <- c("symboling","normalized_losses","wheel_base","length","width","height","curb_weight","engine_size","bore","stroke","compression_ratio","horsepower","peak_rpm","city_mpg","highway_mpg")
 continuous <- data[,names_c]   #c(1:2,9:13,16,18:24)
 means <- sapply(continuous,mean)
 k <- sapply(continuous,kurtosis)
@@ -101,15 +103,19 @@ names_nc <- c("make","fuel_type","aspiration","number_of_doors","body_style","dr
 
 #Boxplots by make
 pdf("C:\\Users\\cedri\\Documents\\Unif\\2020-2021\\Q7\\LSTAT2120 Modèles linéaires\\plots\\boxplot_by_make.pdf") 
+j <- 1
 for(i in data[,names_c]){
-  boxplot(i~data[,"make"],ylab=names_nc[j],xlab="")
+  boxplot(i~data[,"make"],ylab=names_nc[j])
+  j <- j+1
 }
 dev.off()
 
 #Boxplots by price
 pdf("C:\\Users\\cedri\\Documents\\Unif\\2020-2021\\Q7\\LSTAT2120 Modèles linéaires\\plots\\boxplot_by_price.pdf") 
+j <- 1
 for(i in data[,names_nc]){
   boxplot(data$price~i,xlab=names_c[j],ylab="price")
+  j <- j+1
 }
 dev.off()
 
